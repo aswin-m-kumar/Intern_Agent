@@ -132,6 +132,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 colors: ['#3b82f6', '#8b5cf6', '#10b981']
             });
 
+            // Parse response naive approach based on prompt text
+            const rawContent = data.content;
+            
+            let posterContent = rawContent;
+            let whatsappContent = "";
+
+            if(rawContent.includes("TASK 2: WHATSAPP CAPTION")) {
+                const parts = rawContent.split("TASK 2: WHATSAPP CAPTION");
+                posterContent = parts[0].replace("TASK 1: POSTER CONTENT", "").trim();
+                whatsappContent = parts[1].trim();
+            } else {
+                posterContent = rawContent;
+            }
+
             // Clear previous QR code
             document.getElementById('qrcode').innerHTML = "";
             
@@ -145,12 +159,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 correctLevel : QRCode.CorrectLevel.H
             });
 
-            // Reveal card and trigger typewriter
+            // Reveal cards and trigger typewriter
             resultsSection.classList.remove('hidden');
-            outputText.textContent = '';
+            posterText.textContent = '';
+            whatsappText.textContent = '';
             
             setTimeout(() => {
-                typeWriter(outputText, data.content.trim(), 5);
+                Promise.all([
+                    typeWriter(posterText, posterContent, 5),
+                    typeWriter(whatsappText, whatsappContent || "Information not provided by AI.", 5)
+                ]);
             }, 300);
 
         } catch (error) {
