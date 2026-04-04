@@ -16,7 +16,8 @@ CORS(app) # Enable Cross-Origin Resource Sharing so GitHub Pages can request thi
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["20 per hour"]
+    default_limits=["20 per hour"],
+    storage_uri="memory://"
 )
 
 @app.route("/")
