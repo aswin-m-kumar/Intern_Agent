@@ -4,6 +4,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from internship_agent import scrape_website_text, generate_internship_content
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -46,11 +47,20 @@ def generate():
             "success": True,
             "content": content
         })
-    except Exception as e:
+    except ValueError as e:
+        # ValueError is raised by our own validation (SSRF, bad URL, etc.)
+        # Safe to show to the client as we control the message.
         return jsonify({
             "success": False,
             "error": str(e)
+        }), 400
+    except Exception as e:
+        # Log the real error server-side for debugging, but never expose it to the client.
+        logging.exception("Unhandled error during content generation")
+        return jsonify({
+            "success": False,
+            "error": "An internal server error occurred. Please try again later."
         }), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

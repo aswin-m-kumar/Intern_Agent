@@ -5,37 +5,41 @@ import socket
 import ipaddress
 from urllib.parse import urlparse
 
-def is_safe_url(url):
-    parsed = urlparse(url)
-    hostname = parsed.hostname
-    try:
-        ip = socket.gethostbyname(hostname)
-        addr = ipaddress.ip_address(ip)
-        if addr.is_private or addr.is_loopback or addr.is_link_local:
-            raise ValueError(f"Requests to internal addresses are forbidden.")
-    except socket.gaierror:
-        raise ValueError("Could not resolve hostname.")
-
-# 1. We will initialize the client locally inside the generation function so the user can pass their key.
 def scrape_website_text(url):
     """Fetches the webpage and extracts only human-readable text."""
     
-    # 1. SSRF Mitigation: Validate URL scheme and safety
+    # 1. SSRF Mitigation: Validate URL scheme
     parsed_url = urlparse(url)
     if parsed_url.scheme not in ("http", "https"):
         raise ValueError("Invalid URL scheme. Only HTTP and HTTPS are allowed.")
-        
-    is_safe_url(url)
+    
+    # 2. SSRF Mitigation: Resolve DNS once and validate the IP.
+    #    This prevents DNS rebinding attacks where an attacker's DNS
+    #    returns a safe IP during validation, then 127.0.0.1 during the real request.
+    hostname = parsed_url.hostname
+    try:
+        ip = socket.gethostbyname(hostname)
+    except socket.gaierror:
+        raise ValueError("Could not resolve hostname.")
+    
+    addr = ipaddress.ip_address(ip)
+    if addr.is_private or addr.is_loopback or addr.is_link_local:
+        raise ValueError("Requests to internal addresses are forbidden.")
+    
+    # Force requests to use the already-resolved IP, spoofing the Host header
+    # so the target server still routes the request correctly.
+    safe_url = url.replace(hostname, ip, 1)
         
     print(f"Scraping data from: {url} ...")
     
     # Use a standard user-agent so websites don't block the request
     headers = {
+        'Host': hostname,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     
-    # 2. Prevent DoS: Add a connection timeout
-    response = requests.get(url, headers=headers, timeout=10)
+    # 3. Prevent DoS: Add a connection timeout
+    response = requests.get(safe_url, headers=headers, timeout=10)
     response.raise_for_status()
     
     soup = BeautifulSoup(response.text, 'html.parser')
