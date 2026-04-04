@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from internship_agent import scrape_website_text, generate_internship_content
 import os
 from dotenv import load_dotenv
@@ -9,11 +11,19 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app) # Enable Cross-Origin Resource Sharing so GitHub Pages can request this backend
 
+# Setup rate limiting to prevent abuse
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["20 per hour"]
+)
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/api/generate", methods=["POST"])
+@limiter.limit("5 per minute")
 def generate():
     data = request.json
     url = data.get("url")
