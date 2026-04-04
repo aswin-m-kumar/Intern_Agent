@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
             
             // TODO: Once you deploy to Render, replace the text inside the quotes below!
-            const PROD_BACKEND_URL = "https://YOUR_BACKEND_NAME.onrender.com"; 
+            const PROD_BACKEND_URL = "https://intern-agent.onrender.com"; 
             
             const API_ENDPOINT = isLocalhost ? '/api/generate' : `${PROD_BACKEND_URL}/api/generate`;
 
