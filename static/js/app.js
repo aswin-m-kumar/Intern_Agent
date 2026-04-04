@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = submitBtn.querySelector('.loader');
     
     const resultsSection = document.getElementById('results');
-    const outputText = document.getElementById('output-text');
+    const posterText = document.getElementById('poster-text');
+    const whatsappText = document.getElementById('whatsapp-text');
     const errorCard = document.getElementById('error-message');
     const statusText = document.getElementById('status-text');
 
