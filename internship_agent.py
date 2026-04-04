@@ -1,4 +1,5 @@
 import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 from openai import OpenAI
 import socket
@@ -21,8 +22,6 @@ def scrape_website_text(url):
     if addr.is_private or addr.is_loopback or addr.is_link_local:
         raise ValueError("Requests to internal addresses are forbidden.")
 
-    # DNS is validated above. Use normal requests — SSL works correctly with hostname.
-    # True DNS rebinding is a very narrow attack window; validation above is sufficient for this use case.
     print(f"Scraping data from: {url} ...")
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
@@ -36,10 +35,18 @@ def scrape_website_text(url):
         'Sec-Fetch-Site': 'none',
         'Sec-Fetch-User': '?1',
     }
+
+    # Try standard requests first
     response = requests.get(url, headers=headers, timeout=15)
     
+    # If blocked, retry with cloudscraper (bypasses Cloudflare & common anti-bot)
     if response.status_code == 403:
-        raise ValueError("Access denied by the website. This site blocks automated scraping. Try a different URL.")
+        print("Standard request blocked (403). Retrying with cloudscraper...")
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(url, timeout=15)
+        if response.status_code == 403:
+            raise ValueError("Access denied by the website. This site has strong anti-bot protection. Try a different URL.")
+    
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')

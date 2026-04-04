@@ -6,3 +6,4 @@ openai
 python-dotenv
 gunicorn
 Flask-Limiter
+cloudscraper
