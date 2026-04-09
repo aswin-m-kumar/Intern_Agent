@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -17,7 +17,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="frontend/dist", static_url_path="/")
 CORS(app)
 
 limiter = Limiter(
@@ -29,7 +29,7 @@ limiter = Limiter(
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/api/generate", methods=["POST"])
 @limiter.limit("5 per minute")
