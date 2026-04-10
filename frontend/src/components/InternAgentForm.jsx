@@ -58,12 +58,12 @@ export const InternAgentForm = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col pt-6 pb-12 px-8 text-white relative z-50">
+    <div className="relative z-50 mx-auto flex w-full max-w-2xl flex-col px-6 pb-10 pt-7 text-slate-100 sm:px-8">
       <header className="mb-8 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#73bfc4] via-[#8da0ce] to-[#ff810a]">
+        <h1 className="mb-2 bg-gradient-to-r from-[#d6fff7] via-[#acfbff] to-[#f7ffff] bg-clip-text text-4xl font-extrabold tracking-tight text-transparent drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
           InternAgent
         </h1>
-        <p className="text-sm uppercase tracking-[0.2em] font-medium text-white/70">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-white/80">
           Automated Communications Engine
         </p>
         <div className="mt-4 flex justify-center space-x-1">
@@ -73,8 +73,8 @@ export const InternAgentForm = () => {
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 rounded-full text-xs font-semibold capitalize transition-all duration-300 ${
                 activeTab === tab 
-                ? 'bg-white/20 shadow-[0_0_15px_rgba(255,255,255,0.4)] text-white' 
-                : 'text-white/50 hover:bg-white/10 hover:text-white'
+                ? 'bg-white/22 shadow-[0_0_18px_rgba(186,255,247,0.35)] text-white' 
+                : 'text-white/65 hover:bg-white/12 hover:text-white'
               }`}
             >
               {tab}
@@ -87,7 +87,7 @@ export const InternAgentForm = () => {
         <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 h-full max-h-[60vh]">
           <form onSubmit={handleSubmit} className="space-y-6">
             
-            <div className="flex bg-black/30 p-1 rounded-xl backdrop-blur-sm self-center justify-center max-w-[240px] mx-auto border border-white/10">
+            <div className="mx-auto flex max-w-[240px] self-center justify-center rounded-xl border border-white/25 bg-[#032a2d]/70 p-1 shadow-[0_10px_25px_rgba(0,0,0,0.25)] backdrop-blur-sm">
               <label className="flex-1 text-center cursor-pointer pb-2 pt-2 relative">
                 <input 
                   type="radio" 
@@ -96,9 +96,9 @@ export const InternAgentForm = () => {
                   checked={inputMode === 'url'} 
                   onChange={() => { setInputMode('url'); setResults(null); }} 
                 />
-                <span className={`text-sm font-semibold transition-colors ${inputMode === 'url' ? 'text-[#73bfc4]' : 'text-white/50'}`}>Scrape URL</span>
+                <span className={`text-sm font-semibold transition-colors ${inputMode === 'url' ? 'text-[#8bfff0]' : 'text-white/55'}`}>Scrape URL</span>
                 {inputMode === 'url' && (
-                  <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#73bfc4] shadow-[0_0_8px_#73bfc4] rounded-t-full" />
+                  <div className="absolute bottom-0 left-2 right-2 h-0.5 rounded-t-full bg-[#8bfff0] shadow-[0_0_10px_#8bfff0]" />
                 )}
               </label>
               <label className="flex-1 text-center cursor-pointer pb-2 pt-2 relative">
@@ -109,46 +109,46 @@ export const InternAgentForm = () => {
                   checked={inputMode === 'text'} 
                   onChange={() => { setInputMode('text'); setResults(null); }} 
                 />
-                <span className={`text-sm font-semibold transition-colors ${inputMode === 'text' ? 'text-[#ff810a]' : 'text-white/50'}`}>Paste Text</span>
+                <span className={`text-sm font-semibold transition-colors ${inputMode === 'text' ? 'text-[#ffd4a3]' : 'text-white/55'}`}>Paste Text</span>
                 {inputMode === 'text' && (
-                  <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#ff810a] shadow-[0_0_8px_#ff810a] rounded-t-full" />
+                  <div className="absolute bottom-0 left-2 right-2 h-0.5 rounded-t-full bg-[#ffd4a3] shadow-[0_0_10px_#ffd4a3]" />
                 )}
               </label>
             </div>
 
             {inputMode === 'url' ? (
               <div className="group">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#73bfc4] mb-2 px-1">Target URL</label>
+                <label className="mb-2 block px-1 text-xs font-semibold uppercase tracking-wider text-[#b8fff5]">Target URL</label>
                 <input 
                   type="url" 
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://example.com/internship" 
                   required 
-                  className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#73bfc4] focus:border-transparent transition-all backdrop-blur-md"
+                  className="w-full rounded-xl border border-white/25 bg-[#041e24]/72 px-4 py-3 text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#8bfff0]"
                 />
               </div>
             ) : (
               <div className="space-y-4">
                 <div className="group">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#ff810a] mb-2 px-1">Raw Internship Content</label>
+                  <label className="mb-2 block px-1 text-xs font-semibold uppercase tracking-wider text-[#ffd8ab]">Raw Internship Content</label>
                   <textarea 
                     value={rawText}
                     onChange={(e) => setRawText(e.target.value)}
                     placeholder="Paste all internship details, eligibility, rules, and information here..." 
                     rows="5"
                     required
-                    className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#ff810a] focus:border-transparent transition-all backdrop-blur-md resize-y"
+                    className="w-full resize-y rounded-xl border border-white/25 bg-[#041e24]/72 px-4 py-3 text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#ffd8ab]"
                   />
                 </div>
                 <div className="group">
-                   <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-2 px-1">Application URL (Optional)</label>
+                   <label className="mb-2 block px-1 text-xs font-semibold uppercase tracking-wider text-white/80">Application URL (Optional)</label>
                    <input 
                     type="url" 
                     value={optionalUrl}
                     onChange={(e) => setOptionalUrl(e.target.value)}
                     placeholder="https://..." 
-                    className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[#8da0ce] focus:border-transparent transition-all backdrop-blur-md"
+                    className="w-full rounded-xl border border-white/25 bg-[#041e24]/72 px-4 py-3 text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#9dc3ff]"
                   />
                 </div>
               </div>
@@ -159,8 +159,8 @@ export const InternAgentForm = () => {
               disabled={loading}
               className={`w-full relative group overflow-hidden rounded-xl font-bold text-white transition-all duration-300 ${loading ? 'opacity-80 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'}`}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#73bfc4] via-[#8da0ce] to-[#ff810a] opacity-80 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute inset-[1px] bg-black/50 rounded-xl backdrop-blur-sm" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#66d7cb] via-[#4cb7de] to-[#f3a66f] opacity-90 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-[1px] rounded-xl bg-[#062028]/76 backdrop-blur-sm" />
               <div className="relative py-4 flex items-center justify-center space-x-3">
                 {loading ? (
                   <>

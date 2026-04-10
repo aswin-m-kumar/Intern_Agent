@@ -150,12 +150,22 @@ export const LiquidGlassCard = ({
           className="absolute inset-0 z-10"
           style={{
             borderRadius,
-            boxShadow: glowStyles[glowIntensity],
+            background:
+              'linear-gradient(152deg, rgba(3, 32, 36, 0.68) 0%, rgba(7, 52, 58, 0.52) 42%, rgba(8, 20, 28, 0.62) 100%)',
+            border: '1px solid rgba(225, 255, 255, 0.36)',
           }}
         />
 
         <div
           className="absolute inset-0 z-20"
+          style={{
+            borderRadius,
+            boxShadow: glowStyles[glowIntensity],
+          }}
+        />
+
+        <div
+          className="absolute inset-0 z-30"
           style={{
             borderRadius,
             boxShadow: shadowStyles[shadowIntensity],
