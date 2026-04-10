@@ -143,6 +143,7 @@ export const LiquidGlassCard = ({
           style={{
             borderRadius,
             filter: 'url(#glass-blur)',
+            backdropFilter: 'blur(22px) saturate(130%)',
           }}
         />
 
@@ -151,8 +152,8 @@ export const LiquidGlassCard = ({
           style={{
             borderRadius,
             background:
-              'linear-gradient(152deg, rgba(3, 32, 36, 0.68) 0%, rgba(7, 52, 58, 0.52) 42%, rgba(8, 20, 28, 0.62) 100%)',
-            border: '1px solid rgba(225, 255, 255, 0.36)',
+              'linear-gradient(152deg, rgba(3, 28, 34, 0.78) 0%, rgba(7, 44, 53, 0.72) 42%, rgba(8, 18, 27, 0.8) 100%)',
+            border: '1px solid rgba(225, 255, 255, 0.28)',
           }}
         />
 
@@ -172,7 +173,7 @@ export const LiquidGlassCard = ({
           }}
         />
 
-        {children}
+        <div className="relative z-40">{children}</div>
       </MotionComponent>
     </>
   );
